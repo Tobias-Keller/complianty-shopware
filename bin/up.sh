@@ -13,6 +13,8 @@ docker exec complianty_shopware bash -lc '
 docker exec -u www-data complianty_shopware bash -lc '
   cd /var/www/html &&
   bin/console plugin:refresh &&
+  # Install first: the Administration build only includes plugins that are installed and active.
+  bin/console plugin:install --activate CompliantyConnector &&
   bin/console bundle:dump >/dev/null &&
   rm -f custom/plugins/CompliantyConnector/src/Resources/public/administration/js/complianty-connector.js &&
   # build-administration.sh ends with "Killed" (exit 137) in this image although the plugin bundle is built.
@@ -23,6 +25,5 @@ docker exec -u www-data complianty_shopware bash -lc '
   bin/console assets:install >/dev/null &&
   bin/console scheduled-task:register >/dev/null &&
   { bin/console sales-channel:update:domain localhost:8085 >/dev/null || true; } &&
-  bin/console plugin:install --activate CompliantyConnector &&
   bin/console cache:clear'
 echo "Storefront: http://localhost:8085  Admin: http://localhost:8085/admin (admin / shopware)"

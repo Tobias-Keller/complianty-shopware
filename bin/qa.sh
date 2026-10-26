@@ -30,12 +30,15 @@ echo '== PHPStan'
 $TOOLS/vendor/bin/phpstan clear-result-cache -c phpstan.neon.dist -q
 $TOOLS/vendor/bin/phpstan analyse -c phpstan.neon.dist --no-progress --memory-limit=1G
 echo '== ESLint + Stylelint (Administration)'
-cd $PLUGIN/src/Resources/app/administration
+# The lint tools live outside the plugin's Administration folder: Shopware runs npm install for every
+# package.json it finds there, also on customers' shops.
+cd $PLUGIN/tools/admin-lint
 [ -d node_modules ] || npm install --no-audit --no-fund --loglevel=error
 npm run lint --silent
-npx stylelint 'src/**/*.scss'
+npm run lint:scss --silent
 echo '== JS tests (Administration logic, node --test)'
-npm test --silent
+cd $PLUGIN/src/Resources/app/administration
+node --test --experimental-default-type=module tests/
 cd $PLUGIN
 echo '== PHPUnit (Unit)'
 $TOOLS/vendor/bin/phpunit -c phpunit.xml.dist --no-progress

@@ -13,3 +13,4 @@
 /src/Resources/app/administration/.eslintrc.js export-ignore
 /src/Resources/app/administration/.eslintignore export-ignore
 /src/Resources/app/administration/.stylelintrc export-ignore
+/tools export-ignore
