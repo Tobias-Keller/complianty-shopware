@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "assets/complianty-connector-BMfZIdLb.js",
+    "name": "complianty-connector",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "assets/complianty-connector-DJhFOg3o.css"
+    ]
+  }
+}

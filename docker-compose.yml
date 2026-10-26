@@ -1,12 +1,16 @@
+# Run another Shopware version next to this one, for example 6.7:
+#   DOCKWARE_TAG=6.7.2.2 SHOPWARE_CONTAINER=sw67 SHOPWARE_PORT=8095 ADMINER_PORT=8096 MYSQL_PORT=3317 SSH_PORT=2233 \
+#     docker compose -p sw67 up -d
+# bin/up.sh and bin/qa.sh read SHOPWARE_CONTAINER and SHOPWARE_PORT.
 services:
   shopware:
-    image: dockware/dev:6.6.10.0
-    container_name: complianty_shopware
+    image: dockware/dev:${DOCKWARE_TAG:-6.6.10.0}
+    container_name: ${SHOPWARE_CONTAINER:-complianty_shopware}
     ports:
-      - "8085:80"      # Storefront + Admin (/admin)
-      - "8086:8888"    # Adminer
-      - "3307:3306"    # MySQL
-      - "2223:22"      # SSH
+      - "${SHOPWARE_PORT:-8085}:80"      # Storefront + Admin (/admin)
+      - "${ADMINER_PORT:-8086}:8888"    # Adminer
+      - "${MYSQL_PORT:-3307}:3306"    # MySQL
+      - "${SSH_PORT:-2223}:22"      # SSH
     environment:
       - XDEBUG_ENABLED=0
       - PHP_VERSION=8.3
