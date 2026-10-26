@@ -17,8 +17,9 @@ docker exec -u www-data complianty_shopware bash -lc '
   rm -f custom/plugins/CompliantyConnector/src/Resources/public/administration/js/complianty-connector.js &&
   # build-administration.sh ends with "Killed" (exit 137) in this image although the plugin bundle is built.
   # So success is judged by the bundle, not by the exit code.
-  { bin/build-administration.sh >/dev/null 2>&1 || true; } &&
-  test -s custom/plugins/CompliantyConnector/src/Resources/public/administration/js/complianty-connector.js &&
+  { bin/build-administration.sh >/tmp/admin-build.log 2>&1 || true; } &&
+  { test -s custom/plugins/CompliantyConnector/src/Resources/public/administration/js/complianty-connector.js ||
+    { echo Administration build did not produce the plugin bundle, last lines of the build log follow; tail -n 60 /tmp/admin-build.log; exit 1; }; } &&
   bin/console assets:install >/dev/null &&
   bin/console scheduled-task:register >/dev/null &&
   { bin/console sales-channel:update:domain localhost:8085 >/dev/null || true; } &&
