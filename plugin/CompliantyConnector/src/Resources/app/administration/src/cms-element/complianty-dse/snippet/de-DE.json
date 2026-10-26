@@ -1,0 +1,12 @@
+{
+    "sw-cms": {
+        "elements": {
+            "compliantyDse": {
+                "label": "Datenschutzerklärung (Complianty)",
+                "placeholderTitle": "Datenschutzerklärung aus Complianty",
+                "placeholderText": "Hier erscheint die in Complianty freigegebene Datenschutzerklärung. Besucher sehen die lokal gespeicherte Fassung.",
+                "configInfo": "Keine Einstellungen nötig. Der Text kommt aus der Verbindung unter Einstellungen > Plugins > Complianty."
+            }
+        }
+    }
+}

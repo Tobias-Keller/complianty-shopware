@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Complianty\Connector\Service\TokenStore">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument>%env(APP_SECRET)%</argument>
+        </service>
+
+        <service id="Complianty\Connector\Api\Client">
+            <argument>%kernel.environment%</argument>
+            <argument>%env(default::COMPLIANTY_API_BASE)%</argument>
+            <argument type="service" id="http_client"/>
+        </service>
+
+        <service id="Complianty\Connector\Service\DseStore">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Complianty\Connector\Service\DseSync">
+            <argument type="service" id="Complianty\Connector\Api\Client"/>
+            <argument type="service" id="Complianty\Connector\Service\TokenStore"/>
+            <argument type="service" id="Complianty\Connector\Service\DseStore"/>
+        </service>
+
+        <service id="Complianty\Connector\Cms\DseCmsElementResolver">
+            <argument type="service" id="Complianty\Connector\Service\DseStore"/>
+            <argument type="service" id="Complianty\Connector\Service\DseSync"/>
+            <argument type="service" id="Complianty\Connector\Service\TokenStore"/>
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
+
+        <service id="Complianty\Connector\ScheduledTask\DseSyncTask">
+            <tag name="shopware.scheduled.task"/>
+        </service>
+
+        <service id="Complianty\Connector\ScheduledTask\DseSyncTaskHandler">
+            <argument type="service" id="scheduled_task.repository"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="Complianty\Connector\Service\DseSync"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="Complianty\Connector\Controller\ConnectionController" public="true">
+            <argument type="service" id="Complianty\Connector\Api\Client"/>
+            <argument type="service" id="Complianty\Connector\Service\TokenStore"/>
+            <argument type="service" id="Complianty\Connector\Service\DseStore"/>
+            <argument type="service" id="Complianty\Connector\Service\DseSync"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+    </services>
+</container>

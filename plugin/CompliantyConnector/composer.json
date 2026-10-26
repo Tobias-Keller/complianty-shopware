@@ -1,0 +1,45 @@
+{
+    "name": "complianty/shopware-connector",
+    "description": "Complianty Connector für Shopware 6",
+    "type": "shopware-platform-plugin",
+    "license": "GPL-2.0-or-later",
+    "version": "0.1.0",
+    "require": {
+        "shopware/core": "~6.6.0",
+        "php": ">=8.2"
+    },
+    "extra": {
+        "shopware-plugin-class": "Complianty\\Connector\\CompliantyConnector",
+        "label": {
+            "de-DE": "Complianty Connector",
+            "en-GB": "Complianty Connector"
+        },
+        "description": {
+            "de-DE": "Verbindet den Shop mit Complianty (DSGVO-Compliance).",
+            "en-GB": "Connects the shop to Complianty (GDPR compliance)."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://complianty.de/",
+            "en-GB": "https://complianty.de/"
+        },
+        "supportLink": {
+            "de-DE": "https://complianty.de/",
+            "en-GB": "https://complianty.de/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Complianty\\Connector\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Complianty"
+        }
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "Complianty\\Connector\\Tests\\": "tests/"
+        }
+    }
+}

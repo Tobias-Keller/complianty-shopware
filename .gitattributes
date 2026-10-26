@@ -1,0 +1,15 @@
+# Archives (git archive, Composer dist, release ZIP) contain the plugin, not the development setup.
+/.github export-ignore
+/bin export-ignore
+/tests export-ignore
+/docker-compose.yml export-ignore
+/phpunit.xml.dist export-ignore
+/phpunit.integration.xml.dist export-ignore
+/phpstan.neon.dist export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/src/Resources/app/administration/tests export-ignore
+/src/Resources/app/administration/.eslintrc.js export-ignore
+/src/Resources/app/administration/.eslintignore export-ignore
+/src/Resources/app/administration/.stylelintrc export-ignore

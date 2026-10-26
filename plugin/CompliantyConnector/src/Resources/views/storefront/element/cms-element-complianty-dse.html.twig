@@ -1,0 +1,8 @@
+{% block element_complianty_dse %}
+    {% set html = element.data.html|default('') %}
+    {% if html != '' %}
+        <div class="cms-element-complianty-dse complianty-dse">
+            {{ html|raw }}
+        </div>
+    {% endif %}
+{% endblock %}

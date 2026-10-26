@@ -1,0 +1,25 @@
+includes:
+    # Erweiterungen, die auch Shopware selbst nutzt, dazu die Plugin-Regeln von shopwarelabs/phpstan-shopware.
+    # %rootDir% ist die PHPStan-Installation, die Erweiterungen liegen im selben vendor-Verzeichnis.
+    - %rootDir%/../../shopwarelabs/phpstan-shopware/rules.neon
+    - %rootDir%/../../phpstan/phpstan-strict-rules/rules.neon
+    - %rootDir%/../../phpstan/phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../../phpstan/phpstan-phpunit/extension.neon
+    - %rootDir%/../../phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Resources
+    ignoreErrors:
+        # Die Fake-API (Test-Hilfe) schreibt Szenario und Anfrage-Log in das Temp-Verzeichnis. Produktivcode darf das nicht.
+        -
+            identifier: shopware.forbidLocalDiskWrite
+            paths:
+                - tests/Support/*
+    bootstrapFiles:
+        # Autoloader des Shops: Shopware-Kern und Symfony. Das Plugin muss unter custom/plugins/ liegen.
+        - tests/bootstrap.php

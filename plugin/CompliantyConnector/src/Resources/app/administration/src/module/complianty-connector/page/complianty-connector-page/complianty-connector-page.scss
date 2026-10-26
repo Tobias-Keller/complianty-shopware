@@ -1,0 +1,185 @@
+// Optik wie in Complianty (frontend/src/styles/variables.css) und im WordPress-Plugin.
+$c-text: #1e1b4b;
+$c-muted: #64748b;
+$c-primary: #7c3aed;
+$c-primary-50: #f5f3ff;
+$c-border: #e5e7eb;
+$c-ok: #10b981;
+$c-ok-bg: #ecfdf5;
+$c-gaps: #f59e0b;
+$c-gaps-bg: #fffbeb;
+$c-critical: #ef4444;
+$c-critical-bg: #fef2f2;
+$c-neutral: #94a3b8;
+$c-neutral-bg: #f8fafc;
+$radius-sm: 8px;
+$radius-md: 12px;
+
+.complianty-connector-page {
+    color: $c-text;
+
+    .sw-card {
+        border-radius: $radius-md;
+        box-shadow: 0 4px 12px -2px rgba(124, 58, 237, 8%), 0 2px 6px -2px rgba(124, 58, 237, 4%);
+    }
+
+    .complianty-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 16px;
+        margin: 0 0 16px;
+        padding: 14px 16px;
+        border: 1px solid $c-border;
+        border-left: 4px solid $c-neutral;
+        border-radius: $radius-sm;
+        background: $c-neutral-bg;
+
+        &--ok {
+            border-left-color: $c-ok;
+            background: $c-ok-bg;
+
+            .complianty-summary__dot {
+                background: $c-ok;
+            }
+        }
+
+        &--gaps {
+            border-left-color: $c-gaps;
+            background: $c-gaps-bg;
+
+            .complianty-summary__dot {
+                background: $c-gaps;
+            }
+        }
+
+        &--critical {
+            border-left-color: $c-critical;
+            background: $c-critical-bg;
+
+            .complianty-summary__dot {
+                background: $c-critical;
+            }
+        }
+
+        &__dot {
+            display: inline-block;
+            flex: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $c-neutral;
+        }
+
+        &__label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        &__meta {
+            flex-basis: 100%;
+            margin: 0;
+            color: $c-muted;
+            font-size: 12px;
+
+            code {
+                padding: 1px 6px;
+                border-radius: 4px;
+                background: $c-primary-50;
+                color: $c-primary;
+            }
+        }
+    }
+
+    .complianty-pills {
+        display: flex;
+        gap: 6px;
+    }
+
+    .complianty-pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: #e2e8f0;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.6;
+        white-space: nowrap;
+
+        &--critical {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        &--important {
+            background: #fef3c7;
+            color: #92400e;
+        }
+    }
+
+    // Der Admin setzt Überschriften in Karten über eigene Selektoren auf Normalgewicht und 18 px.
+    .complianty-heading.complianty-heading {
+        margin: 20px 0 10px;
+        color: $c-text;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .complianty-todos {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .complianty-todo {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 2px 10px;
+        align-items: start;
+        margin: 0 0 8px;
+        padding: 10px 14px;
+        border: 1px solid $c-border;
+        border-left: 4px solid $c-neutral;
+        border-radius: $radius-sm;
+        background: #fff;
+
+        &--critical {
+            border-left-color: $c-critical;
+        }
+
+        &--important {
+            border-left-color: $c-gaps;
+        }
+
+        &__text {
+            grid-column: 2;
+            color: $c-muted;
+        }
+    }
+
+    .complianty-scan {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 0 0 16px;
+
+        .complianty-summary {
+            align-self: stretch;
+            margin: 0;
+        }
+    }
+
+    .complianty-usage {
+        margin: 0 0 16px;
+        color: $c-muted;
+        font-size: 13px;
+    }
+
+    .complianty-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}

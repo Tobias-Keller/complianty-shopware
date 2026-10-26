@@ -1,0 +1,12 @@
+{
+    "sw-cms": {
+        "elements": {
+            "compliantyDse": {
+                "label": "Privacy policy (Complianty)",
+                "placeholderTitle": "Privacy policy from Complianty",
+                "placeholderText": "The privacy policy approved in Complianty appears here. Visitors see the locally stored version.",
+                "configInfo": "No settings needed. The text comes from the connection under Settings > Plugins > Complianty."
+            }
+        }
+    }
+}

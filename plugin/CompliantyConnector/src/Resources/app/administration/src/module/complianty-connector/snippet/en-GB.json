@@ -1,0 +1,113 @@
+{
+    "complianty-connector": {
+        "general": {
+            "title": "Complianty",
+            "description": "Connects the shop to Complianty (GDPR compliance)."
+        },
+        "connection": {
+            "title": "Connection",
+            "token": "Active token",
+            "tokenLabel": "Connection token",
+            "tokenPlaceholder": "clp_site_…",
+            "tokenHelp": "Created in Complianty for the client and website. The token is stored encrypted and never shown again.",
+            "connect": "Connect",
+            "replace": "Replace token",
+            "disconnect": "Disconnect"
+        },
+        "state": {
+            "no_token": "Not connected. No data is sent to Complianty.",
+            "ok": "Connected.",
+            "unauthorized": "The token was rejected. Please create a new token in Complianty.",
+            "subscription_inactive": "Connected, but the Complianty subscription is not active.",
+            "feature_not_available": "Connected, but the plan does not include integrations.",
+            "forbidden": "The token lacks the required permissions.",
+            "rate_limited": "Too many requests. Please try again in a minute.",
+            "unreachable": "Complianty is currently unreachable.",
+            "invalid": "Unexpected response from Complianty."
+        },
+        "connectError": {
+            "malformed": "This is not a valid Complianty token. It starts with clp_site_.",
+            "unauthorized": "Complianty rejected the token.",
+            "forbidden": "The token lacks the required permissions.",
+            "rate_limited": "Too many requests. Please try again in a minute.",
+            "unreachable": "Complianty is currently unreachable.",
+            "invalid": "Unexpected response from Complianty."
+        },
+        "notification": {
+            "connected": "Connection saved."
+        },
+        "status": {
+            "title": "Status",
+            "refresh": "Refresh",
+            "critical": "Critical findings",
+            "important": "Important findings",
+            "lastScan": "Last scan",
+            "never": "never",
+            "todos": "Open tasks",
+            "overall": {
+                "ok": "No open findings.",
+                "gaps": "There are open gaps.",
+                "critical": "There are critical findings.",
+                "pending": "No scan result yet."
+            },
+            "scan": {
+                "queued": "A scan is queued.",
+                "running": "A scan is running."
+            },
+            "pillCritical": "{count} critical",
+            "pillImportant": "{count} important"
+        },
+        "priority": {
+            "critical": "Critical",
+            "important": "Important",
+            "info": "Info"
+        },
+        "dse": {
+            "title": "Privacy policy",
+            "state": {
+                "active": "Approved version available.",
+                "lapsed": "The Complianty subscription has lapsed. The notice from the service is shown.",
+                "not_approved": "The privacy policy is not yet approved in Complianty.",
+                "missing": "There is no privacy policy for this website in Complianty yet."
+            },
+            "approvedAt": "Approved on",
+            "checkedAt": "Last synced",
+            "copyYes": "A local copy is served by the shop.",
+            "copyNo": "There is no local copy yet, nothing appears in the shop.",
+            "notFetched": "Not synced yet.",
+            "usage": "Usage: in the Shopping Experiences editor, drag the \"Privacy policy (Complianty)\" element onto your privacy page. The sync runs every 6 hours.",
+            "sync": "Sync now"
+        },
+        "scan": {
+            "start": "Scan now",
+            "notAllowed": "This token is not allowed to start scans. You can allow it for the token in Complianty."
+        },
+        "scanMessage": {
+            "running": "The scan is running. This page updates when it is finished.",
+            "alreadyRunning": "A scan is already running. The result appears here when it is finished.",
+            "done": "The scan is complete.",
+            "lastError": "The last scan failed: {error}",
+            "timeout": "This takes longer than expected. The result appears later via \"Refresh\".",
+            "pollError": "The scan state could not be read. Please reload the page.",
+            "cooldown": "A scan was started for this website a short while ago. Please try again in {wait}.",
+            "budget": "The daily scan budget of your plan is used up. Please try again tomorrow.",
+            "noScopeRight": "This token is not allowed to start scans. You can allow it for the token in Complianty.",
+            "forbidden": "The token lacks the required permissions.",
+            "unsafeUrl": "The address of this website cannot be checked from outside, for example because it is local or private.",
+            "rejected": "The service rejected the scan.",
+            "scannerBusy": "The scanner is busy right now. Please try again in a few minutes.",
+            "rateLimited": "Too many requests. Please try again in a minute.",
+            "unreachable": "Complianty is currently unreachable.",
+            "unauthorized": "The token was rejected. Please create a new token in Complianty.",
+            "subscriptionInactive": "The Complianty subscription is not active.",
+            "featureNotAvailable": "The plan does not include integrations.",
+            "noToken": "Not connected.",
+            "invalid": "Unexpected response from Complianty."
+        },
+        "scanWait": {
+            "seconds": "{count} second | {count} seconds",
+            "minutes": "{count} minute | {count} minutes",
+            "hours": "{count} hour | {count} hours"
+        }
+    }
+}

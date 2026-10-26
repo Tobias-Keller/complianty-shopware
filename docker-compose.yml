@@ -1,0 +1,28 @@
+services:
+  shopware:
+    image: dockware/dev:6.6.10.0
+    container_name: complianty_shopware
+    ports:
+      - "8085:80"      # Storefront + Admin (/admin)
+      - "8086:8888"    # Adminer
+      - "3307:3306"    # MySQL
+      - "2223:22"      # SSH
+    environment:
+      - XDEBUG_ENABLED=0
+      - PHP_VERSION=8.3
+      - COMPLIANTY_API_BASE=http://host.docker.internal:8003/api/v1/connect
+      - NODE_VERSION=20
+    volumes:
+      - .:/var/www/html/custom/plugins/CompliantyConnector
+      - shopware_db:/var/lib/mysql
+    networks:
+      - shopware
+    extra_hosts:
+      # Reach a Complianty backend running on the host from inside the container
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  shopware_db:
+
+networks:
+  shopware:

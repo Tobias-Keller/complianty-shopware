@@ -1,0 +1,113 @@
+{
+    "complianty-connector": {
+        "general": {
+            "title": "Complianty",
+            "description": "Verbindet den Shop mit Complianty (DSGVO-Compliance)."
+        },
+        "connection": {
+            "title": "Verbindung",
+            "token": "Aktives Token",
+            "tokenLabel": "Verbindungstoken",
+            "tokenPlaceholder": "clp_site_…",
+            "tokenHelp": "In Complianty unter dem Mandanten und der Website erzeugt. Das Token wird verschlüsselt gespeichert und nicht wieder angezeigt.",
+            "connect": "Verbinden",
+            "replace": "Token ersetzen",
+            "disconnect": "Trennen"
+        },
+        "state": {
+            "no_token": "Nicht verbunden. Es werden keine Daten an Complianty gesendet.",
+            "ok": "Verbunden.",
+            "unauthorized": "Das Token wurde abgelehnt. Bitte in Complianty ein neues Token erzeugen.",
+            "subscription_inactive": "Verbunden, aber das Complianty-Abo ist nicht aktiv.",
+            "feature_not_available": "Verbunden, aber der Tarif enthält die Integrationen nicht.",
+            "forbidden": "Das Token hat nicht die nötigen Rechte.",
+            "rate_limited": "Zu viele Anfragen. Bitte in einer Minute erneut versuchen.",
+            "unreachable": "Complianty ist gerade nicht erreichbar.",
+            "invalid": "Unerwartete Antwort von Complianty."
+        },
+        "connectError": {
+            "malformed": "Das ist kein gültiges Complianty-Token. Es beginnt mit clp_site_.",
+            "unauthorized": "Das Token wurde von Complianty abgelehnt.",
+            "forbidden": "Das Token hat nicht die nötigen Rechte.",
+            "rate_limited": "Zu viele Anfragen. Bitte in einer Minute erneut versuchen.",
+            "unreachable": "Complianty ist gerade nicht erreichbar.",
+            "invalid": "Unerwartete Antwort von Complianty."
+        },
+        "notification": {
+            "connected": "Verbindung gespeichert."
+        },
+        "status": {
+            "title": "Status",
+            "refresh": "Aktualisieren",
+            "critical": "Kritische Befunde",
+            "important": "Wichtige Befunde",
+            "lastScan": "Letzter Scan",
+            "never": "noch nie",
+            "todos": "Offene Aufgaben",
+            "overall": {
+                "ok": "Keine offenen Befunde.",
+                "gaps": "Es gibt offene Lücken.",
+                "critical": "Es gibt kritische Befunde.",
+                "pending": "Noch kein Scan-Ergebnis."
+            },
+            "scan": {
+                "queued": "Ein Scan ist eingeplant.",
+                "running": "Ein Scan läuft gerade."
+            },
+            "pillCritical": "{count} kritisch",
+            "pillImportant": "{count} wichtig"
+        },
+        "priority": {
+            "critical": "Kritisch",
+            "important": "Wichtig",
+            "info": "Info"
+        },
+        "dse": {
+            "title": "Datenschutzerklärung",
+            "state": {
+                "active": "Freigegebene Fassung vorhanden.",
+                "lapsed": "Das Complianty-Abo ist abgelaufen. Es wird der Hinweis des Dienstes angezeigt.",
+                "not_approved": "Die Datenschutzerklärung ist in Complianty noch nicht freigegeben.",
+                "missing": "In Complianty gibt es noch keine Datenschutzerklärung für diese Website."
+            },
+            "approvedAt": "Freigegeben am",
+            "checkedAt": "Zuletzt abgeglichen",
+            "copyYes": "Eine lokale Kopie wird im Shop ausgeliefert.",
+            "copyNo": "Es gibt noch keine lokale Kopie, im Shop erscheint nichts.",
+            "notFetched": "Noch nicht abgeglichen.",
+            "usage": "Einbindung: Im Shopping-Erlebnis-Editor das Element „Datenschutzerklärung (Complianty)“ in die Datenschutz-Seite ziehen. Der Abgleich läuft alle 6 Stunden.",
+            "sync": "Jetzt abgleichen"
+        },
+        "scan": {
+            "start": "Jetzt scannen",
+            "notAllowed": "Dieses Token darf keine Scans auslösen. In Complianty lässt sich das beim Token erlauben."
+        },
+        "scanMessage": {
+            "running": "Der Scan läuft. Diese Seite aktualisiert sich, sobald er fertig ist.",
+            "alreadyRunning": "Es läuft bereits ein Scan. Das Ergebnis erscheint hier, sobald er fertig ist.",
+            "done": "Der Scan ist abgeschlossen.",
+            "lastError": "Der letzte Scan ist fehlgeschlagen: {error}",
+            "timeout": "Das dauert länger als erwartet. Das Ergebnis erscheint später über „Aktualisieren“.",
+            "pollError": "Der Scan-Zustand konnte nicht gelesen werden. Bitte die Seite neu laden.",
+            "cooldown": "Für diese Website wurde vor Kurzem ein Scan gestartet. Bitte in {wait} erneut versuchen.",
+            "budget": "Das tägliche Scan-Kontingent des Tarifs ist aufgebraucht. Bitte morgen erneut versuchen.",
+            "noScopeRight": "Dieses Token darf keine Scans auslösen. In Complianty lässt sich das beim Token erlauben.",
+            "forbidden": "Das Token hat nicht die nötigen Rechte.",
+            "unsafeUrl": "Die Adresse dieser Website kann nicht von außen geprüft werden, etwa weil sie lokal oder privat ist.",
+            "rejected": "Der Dienst hat den Scan abgelehnt.",
+            "scannerBusy": "Der Scanner ist gerade ausgelastet. Bitte in ein paar Minuten erneut versuchen.",
+            "rateLimited": "Zu viele Anfragen. Bitte in einer Minute erneut versuchen.",
+            "unreachable": "Complianty ist gerade nicht erreichbar.",
+            "unauthorized": "Das Token wurde abgelehnt. Bitte in Complianty ein neues Token erzeugen.",
+            "subscriptionInactive": "Das Complianty-Abo ist nicht aktiv.",
+            "featureNotAvailable": "Der Tarif enthält die Integrationen nicht.",
+            "noToken": "Nicht verbunden.",
+            "invalid": "Unerwartete Antwort von Complianty."
+        },
+        "scanWait": {
+            "seconds": "{count} Sekunde | {count} Sekunden",
+            "minutes": "{count} Minute | {count} Minuten",
+            "hours": "{count} Stunde | {count} Stunden"
+        }
+    }
+}
