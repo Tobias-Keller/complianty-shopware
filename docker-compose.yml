@@ -1,6 +1,6 @@
 services:
   shopware:
-    image: dockware/dev:6.6.10.0
+    image: dockware/dev:6.7.2.2
     container_name: complianty_shopware
     ports:
       - "8085:80"      # Storefront + Admin (/admin)
