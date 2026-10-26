@@ -57,7 +57,7 @@ To point the plugin at a Complianty backend running on your machine, set `COMPLI
 | Step | Tool | Configuration |
 |---|---|---|
 | PHP style | PHP-CS-Fixer | `.php-cs-fixer.dist.php`, taken from shopware/shopware |
-| Static analysis | PHPStan level 8, `shopwarelabs/phpstan-shopware`, strict, deprecation and PHPUnit rules | `phpstan.neon.dist` |
+| Static analysis | PHPStan level 8, `shopwarelabs/phpstan-shopware`, strict, deprecation and PHPUnit rules | `phpstan.plugin.neon` |
 | Administration JS and Twig | ESLint with the Shopware Administration rules | `src/Resources/app/administration/.eslintrc.js`, tools in `tools/admin-lint/` |
 | Administration SCSS | Stylelint with the Shopware config | `src/Resources/app/administration/.stylelintrc` |
 | Administration logic | `node --test` (polling, result mapping) | `src/Resources/app/administration/tests/` |

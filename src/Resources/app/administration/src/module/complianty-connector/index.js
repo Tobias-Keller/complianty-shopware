@@ -1,6 +1,4 @@
 import './page/complianty-connector-page';
-import deDE from './snippet/de-DE.json';
-import enGB from './snippet/en-GB.json';
 
 Shopware.Module.register('complianty-connector', {
     type: 'plugin',
@@ -9,11 +7,6 @@ Shopware.Module.register('complianty-connector', {
     description: 'complianty-connector.general.description',
     color: '#0f766e',
     icon: 'regular-cog',
-
-    snippets: {
-        'de-DE': deDE,
-        'en-GB': enGB,
-    },
 
     routes: {
         index: {
