@@ -1,0 +1,97 @@
+name: Release
+
+# Releases only come from a version tag, never from a manual upload.
+# Tag format: v1.2.3. The number must match "version" in composer.json and have an entry in both changelogs
+# (bin/version.sh set 1.2.3 does the first part).
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks on the tagged commit
+    uses: ./.github/workflows/ci.yml
+
+  package:
+    name: Build and verify the ZIP
+    runs-on: ubuntu-latest
+    needs: checks
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Version must match the tag
+        run: bin/version.sh check "${GITHUB_REF_NAME#v}"
+
+      # git archive honours export-ignore (.gitattributes): the ZIP holds the plugin, not the development setup.
+      # The prebuilt Administration bundles for 6.6 and 6.7 are committed, so no build is needed here.
+      - name: Build the ZIP
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir dist
+          git archive --format=zip --prefix=CompliantyConnector/ -o "dist/CompliantyConnector-${version}.zip" "$GITHUB_SHA"
+          unzip -l "dist/CompliantyConnector-${version}.zip" | tail -n +4 | awk '{print $4}' | grep -v '^$' | head -n 60
+
+      - name: The ZIP must not contain development files
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if unzip -Z1 "dist/CompliantyConnector-${version}.zip" | grep -E '^CompliantyConnector/(tests|bin|tools|\.github|docker-compose\.yml|phpstan|phpunit)'; then
+            echo "Development files are in the ZIP" >&2
+            exit 1
+          fi
+
+      - name: Validate the ZIP with shopware-cli
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          docker run --rm -v "$PWD/dist":/dist ghcr.io/shopware/shopware-cli extension validate "/dist/CompliantyConnector-${version}.zip"
+
+      - name: Checksum
+        run: |
+          cd dist
+          sha256sum *.zip > SHA256SUMS
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: CompliantyConnector-zip
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS
+
+  github-release:
+    name: GitHub release with checksum
+    runs-on: ubuntu-latest
+    needs: package
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: CompliantyConnector-zip
+          path: dist
+
+      - name: Write release notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          {
+            # The changelog section of this version, up to the next heading.
+            awk -v v="$version" '$0 ~ "^# " v "( |$)" {found=1; next} found && /^# / {exit} found {print}' CHANGELOG.md
+            echo
+            echo "SHA-256:"
+            echo
+            echo '```'
+            cat dist/SHA256SUMS
+            echo '```'
+          } > notes.md
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            dist/*.zip
+            dist/SHA256SUMS
+          body_path: notes.md
