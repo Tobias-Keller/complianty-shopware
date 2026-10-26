@@ -58,13 +58,15 @@ To point the plugin at a Complianty backend running on your machine, set `COMPLI
 |---|---|---|
 | PHP style | PHP-CS-Fixer | `.php-cs-fixer.dist.php`, taken from shopware/shopware |
 | Static analysis | PHPStan level 8, `shopwarelabs/phpstan-shopware`, strict, deprecation and PHPUnit rules | `phpstan.neon.dist` |
-| Administration JS and Twig | ESLint with the Shopware Administration rules | `src/Resources/app/administration/.eslintrc.js` |
+| Administration JS and Twig | ESLint with the Shopware Administration rules | `src/Resources/app/administration/.eslintrc.js`, tools in `tools/admin-lint/` |
 | Administration SCSS | Stylelint with the Shopware config | `src/Resources/app/administration/.stylelintrc` |
 | Administration logic | `node --test` (polling, result mapping) | `src/Resources/app/administration/tests/` |
 | Unit tests | PHPUnit | `phpunit.xml.dist` |
 | Integration tests | PHPUnit against a real kernel and a fake Complianty API served by a real HTTP server | `phpunit.integration.xml.dist` |
 
 Integration tests use the database `shopware_test` (the Shopware `TestBootstrapper` appends `_test`). The development database is not touched, and `TEST_TOKEN=none` is rejected.
+
+The lint tools sit in `tools/admin-lint/` and not in the Administration folder of the plugin on purpose: Shopware runs `npm install` for every `package.json` it finds there, on every shop that builds the plugin.
 
 The PHP-CS-Fixer, ESLint and Stylelint configurations are derived from [shopware/shopware](https://github.com/shopware/shopware) (MIT).
 
