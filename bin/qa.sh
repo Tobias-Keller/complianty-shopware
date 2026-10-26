@@ -27,8 +27,8 @@ echo '== PHP-CS-Fixer'
 PHP_CS_FIXER_IGNORE_ENV=1 $TOOLS/vendor/bin/php-cs-fixer fix $CS_FLAGS --config .php-cs-fixer.dist.php
 echo '== PHPStan'
 # Clear the result cache: a gate must not depend on cache state.
-$TOOLS/vendor/bin/phpstan clear-result-cache -c phpstan.neon.dist -q
-$TOOLS/vendor/bin/phpstan analyse -c phpstan.neon.dist --no-progress --memory-limit=1G
+$TOOLS/vendor/bin/phpstan clear-result-cache -c phpstan.plugin.neon -q
+$TOOLS/vendor/bin/phpstan analyse -c phpstan.plugin.neon --no-progress --memory-limit=1G
 echo '== ESLint + Stylelint (Administration)'
 # The lint tools live outside the plugin's Administration folder: Shopware runs npm install for every
 # package.json it finds there, also on customers' shops.

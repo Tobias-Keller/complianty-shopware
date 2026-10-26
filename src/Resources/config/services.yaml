@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/symfony/dependency-injection/7.4/Loader/schema/services.schema.json
+services:
+    Complianty\Connector\Service\TokenStore:
+        arguments:
+            - '@Shopware\Core\System\SystemConfig\SystemConfigService'
+            - '%env(APP_SECRET)%'
+
+    Complianty\Connector\Api\Client:
+        arguments:
+            - '%kernel.environment%'
+            - '%env(default::COMPLIANTY_API_BASE)%'
+            - '@http_client'
+
+    Complianty\Connector\Service\DseStore:
+        arguments:
+            - '@Shopware\Core\System\SystemConfig\SystemConfigService'
+
+    Complianty\Connector\Service\DseSync:
+        arguments:
+            - '@Complianty\Connector\Api\Client'
+            - '@Complianty\Connector\Service\TokenStore'
+            - '@Complianty\Connector\Service\DseStore'
+
+    Complianty\Connector\Cms\DseCmsElementResolver:
+        arguments:
+            - '@Complianty\Connector\Service\DseStore'
+            - '@Complianty\Connector\Service\DseSync'
+            - '@Complianty\Connector\Service\TokenStore'
+        tags:
+            - shopware.cms.data_resolver
+
+    Complianty\Connector\ScheduledTask\DseSyncTask:
+        tags:
+            - shopware.scheduled.task
+
+    Complianty\Connector\ScheduledTask\DseSyncTaskHandler:
+        arguments:
+            - '@scheduled_task.repository'
+            - '@logger'
+            - '@Complianty\Connector\Service\DseSync'
+        tags:
+            - messenger.message_handler
+
+    Complianty\Connector\Controller\ConnectionController:
+        public: true
+        arguments:
+            - '@Complianty\Connector\Api\Client'
+            - '@Complianty\Connector\Service\TokenStore'
+            - '@Complianty\Connector\Service\DseStore'
+            - '@Complianty\Connector\Service\DseSync'
+        calls:
+            - [setContainer, ['@service_container']]

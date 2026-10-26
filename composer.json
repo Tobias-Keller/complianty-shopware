@@ -44,8 +44,8 @@
             "en-GB": "Complianty Connector"
         },
         "description": {
-            "de-DE": "Verbindet den Shop mit Complianty (DSGVO-Compliance).",
-            "en-GB": "Connects the shop to Complianty (GDPR compliance)."
+            "de-DE": "Verbindet den Shop mit Complianty: zeigt den Scan-Status der Website in der Administration, startet Scans und gibt die freigegebene Datenschutzerklärung als Erlebniswelten-Element aus.",
+            "en-GB": "Connects your shop to Complianty: shows the website scan status in the Administration, starts scans and outputs the approved privacy policy through a Shopping Experiences element."
         },
         "manufacturerLink": {
             "de-DE": "https://complianty.de/",
