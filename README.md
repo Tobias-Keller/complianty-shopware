@@ -1,46 +1,77 @@
-# Complianty Connector für Shopware 6
+# Complianty Connector for Shopware
 
-Lokale Entwicklungsumgebung auf Basis von dockware/dev (Shopware 6.6).
+Shopware 6 plugin that connects a shop to a [Complianty](https://complianty.de/) account. It shows the scan status in the Administration, can start a scan, and outputs the approved privacy policy from the account through a Shopping Experiences element.
 
-```bash
-bin/up.sh
-```
+- Shopware 6.6, PHP 8.2 or newer, GPL-2.0-or-later
+- No runtime dependencies beyond Shopware itself.
+- No build step for the Administration other than Shopware's own (`bin/build-administration.sh`). The built files are committed in `src/Resources/public/administration/`.
 
-| Dienst | URL |
+## How it works
+
+| Part | Where |
 |---|---|
-| Storefront | http://localhost:8085 |
-| Admin | http://localhost:8085/admin (admin / shopware) |
-| Adminer | http://localhost:8086 (Server `127.0.0.1`, user `root`, pw `root`, DB `shopware`) |
-| MySQL | 127.0.0.1:3307 |
+| Only place that talks to the service | `src/Api/Client.php` |
+| Response validation, whitelist per endpoint, error code whitelist | `src/Api/Client.php`, `src/Api/Result.php` |
+| Token storage (encrypted system config) | `src/Service/TokenStore.php` |
+| Privacy policy filtering (HTMLPurifier, narrow whitelist) | `src/Service/DseSanitizer.php` |
+| Local copy of the policy and its sync | `src/Service/DseStore.php`, `src/Service/DseSync.php`, `src/ScheduledTask/` |
+| Shopping Experiences element `complianty-dse` | `src/Cms/`, `src/Resources/views/`, `src/Resources/app/administration/src/cms-element/` |
+| Admin API routes (connect, status, scan, sync) | `src/Controller/ConnectionController.php` |
+| Administration page (Settings > Plugins > Complianty) | `src/Resources/app/administration/src/module/` |
 
-Das Plugin liegt in `plugin/CompliantyConnector` und ist per Volume nach
-`custom/plugins/CompliantyConnector` gemountet. Aus dem Container erreicht man
-das lokale Complianty-Backend unter `http://host.docker.internal:8003`.
+Rules that the code and the tests hold to:
 
-Konsole im Container:
+- Nothing is sent before a token is entered.
+- The token travels only in the `Authorization` header. It is never logged, shown, stored in plain text or sent to the Administration. The UI only gets a short hint.
+- Everything from the service is untrusted: validated against a schema, unknown fields dropped, length capped, error codes checked against a whitelist. The privacy policy HTML is filtered with a narrow whitelist when it is stored and again when it is output.
+- Visitors do not trigger requests while a local copy exists. The copy is refreshed every 6 hours by a scheduled task. Only a page view without any copy makes one request with a 3 second timeout.
+- Scans are started only by a click of a user with write permission. The service enforces cooldown and daily budget, the plugin shows the result.
+- Redirects are never followed. `COMPLIANTY_API_BASE` is ignored in production.
+
+## Use it
+
+1. Create a token for the website and the Shopware integration in your Complianty account.
+2. In the Administration open Settings > Plugins > Complianty, paste the token and click Connect.
+3. In the Shopping Experiences editor, add the element "Privacy policy (Complianty)" to your privacy page layout.
+
+## Development
+
+The setup uses [dockware](https://dockware.io/) and needs Docker.
 
 ```bash
-docker exec -it -u www-data complianty_shopware bash
+bin/up.sh        # start Shopware 6.6, install the plugin, build the Administration
+bin/qa.sh        # run all checks
+bin/qa.sh fix    # let PHP-CS-Fixer repair instead of report
 ```
 
-## Qualitätsprüfung
+| URL | |
+|---|---|
+| http://localhost:8085 | Storefront |
+| http://localhost:8085/admin | Administration (`admin` / `shopware`, the dockware default) |
+| http://localhost:8086 | Adminer |
 
-```bash
-bin/qa.sh        # alles
-bin/qa.sh fix    # PHP-CS-Fixer repariert statt nur zu melden
-```
+To point the plugin at a Complianty backend running on your machine, set `COMPLIANTY_API_BASE` (the default in `docker-compose.yml` is `http://host.docker.internal:8003/api/v1/connect`). The override works only outside of `APP_ENV=prod`.
 
-Läuft im Shop-Container und prüft der Reihe nach:
+`bin/qa.sh` runs, in this order:
 
-| Schritt | Werkzeug | Konfiguration |
+| Step | Tool | Configuration |
 |---|---|---|
-| PHP-Stil | PHP-CS-Fixer | `.php-cs-fixer.dist.php`, übernommen aus shopware/shopware |
-| Statische Analyse | PHPStan Level 8 + `shopwarelabs/phpstan-shopware`, strict-, deprecation-, phpunit-Regeln | `phpstan.neon.dist` |
-| Admin-JS und Twig | ESLint mit der Shopware-Admin-Config (6.6) | `src/Resources/app/administration/.eslintrc.js` |
-| Admin-SCSS | Stylelint mit der Shopware-Config | `.stylelintrc` |
-| Admin-Logik | `node --test` (Polling, Ergebnis-Abbildung), ohne Zusatzpakete | `src/Resources/app/administration/tests/` |
-| Unit-Tests | PHPUnit | `phpunit.xml.dist` |
-| Integrationstests | PHPUnit gegen echten Kernel, Fake-Complianty-API (echter HTTP-Server) | `phpunit.integration.xml.dist` |
+| PHP style | PHP-CS-Fixer | `.php-cs-fixer.dist.php`, taken from shopware/shopware |
+| Static analysis | PHPStan level 8, `shopwarelabs/phpstan-shopware`, strict, deprecation and PHPUnit rules | `phpstan.neon.dist` |
+| Administration JS and Twig | ESLint with the Shopware Administration rules | `src/Resources/app/administration/.eslintrc.js` |
+| Administration SCSS | Stylelint with the Shopware config | `src/Resources/app/administration/.stylelintrc` |
+| Administration logic | `node --test` (polling, result mapping) | `src/Resources/app/administration/tests/` |
+| Unit tests | PHPUnit | `phpunit.xml.dist` |
+| Integration tests | PHPUnit against a real kernel and a fake Complianty API served by a real HTTP server | `phpunit.integration.xml.dist` |
 
-Die Integrationstests nutzen die Datenbank `shopware_test` (der `TestBootstrapper` hängt `_test` an). Die
-Entwicklungsdatenbank `shopware` bleibt unberührt. `TEST_TOKEN=none` ist gesperrt.
+Integration tests use the database `shopware_test` (the Shopware `TestBootstrapper` appends `_test`). The development database is not touched, and `TEST_TOKEN=none` is rejected.
+
+The PHP-CS-Fixer, ESLint and Stylelint configurations are derived from [shopware/shopware](https://github.com/shopware/shopware) (MIT).
+
+## Security
+
+See [SECURITY.md](SECURITY.md).
+
+## License
+
+GPL-2.0-or-later, see [LICENSE](LICENSE).
