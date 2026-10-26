@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qa:
+    name: Checks and tests (Shopware 6.6)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+
+      # The shop runs as www-data inside the container and writes into the mounted repository
+      # (node_modules, caches, the built Administration bundle). On a runner the files belong to another user.
+      - name: Make the workspace writable for the container
+        run: chmod -R a+rwX .
+
+      - name: Start Shopware and install the plugin
+        run: bin/up.sh
+
+      # PHP-CS-Fixer, PHPStan, ESLint, Stylelint, Administration tests, PHPUnit unit and integration tests.
+      - name: Run all checks
+        run: bin/qa.sh
+
+      - name: Shopware logs
+        if: failure()
+        run: |
+          docker logs complianty_shopware 2>&1 | tail -n 200
+          docker exec complianty_shopware bash -lc 'ls /var/www/html/var/log; tail -n 100 /var/www/html/var/log/*.log' || true
