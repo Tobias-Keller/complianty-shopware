@@ -6,12 +6,13 @@
 #   bin/qa.sh fix      let PHP-CS-Fixer repair instead of report
 set -euo pipefail
 
+C="${SHOPWARE_CONTAINER:-complianty_shopware}"
 PLUGIN=/var/www/html/custom/plugins/CompliantyConnector
 TOOLS=/tmp/qa
 CS_FLAGS='--dry-run --diff'
 [ "${1:-}" = fix ] && CS_FLAGS='-v'
 
-docker exec complianty_shopware bash -lc "
+docker exec "$C" bash -lc "
 set -e
 if [ ! -x $TOOLS/vendor/bin/phpunit ]; then
   mkdir -p $TOOLS && cd $TOOLS
@@ -32,10 +33,16 @@ $TOOLS/vendor/bin/phpstan analyse -c phpstan.plugin.neon --no-progress --memory-
 echo '== ESLint + Stylelint (Administration)'
 # The lint tools live outside the plugin's Administration folder: Shopware runs npm install for every
 # package.json it finds there, also on customers' shops.
-cd $PLUGIN/tools/admin-lint
-[ -d node_modules ] || npm install --no-audit --no-fund --loglevel=error
-npm run lint --silent
-npm run lint:scss --silent
+# The rules come from the shop's own vendor directory, and their options change between Shopware lines.
+# The configuration is derived from 6.6, so it only runs there.
+if (cd /var/www/html && bin/console --version | grep -q 'Shopware 6\\.6\\.'); then
+  cd $PLUGIN/tools/admin-lint
+  [ -d node_modules ] || npm install --no-audit --no-fund --loglevel=error
+  npm run lint --silent
+  npm run lint:scss --silent
+else
+  echo 'skipped: the lint configuration is derived from Shopware 6.6'
+fi
 echo '== JS tests (Administration logic, node --test)'
 cd $PLUGIN/src/Resources/app/administration
 node --test --experimental-default-type=module tests/

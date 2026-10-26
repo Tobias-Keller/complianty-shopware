@@ -4,19 +4,39 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  composer:
+    name: composer.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: composer validate
+
   qa:
-    name: Checks and tests (Shopware 6.6)
+    name: Checks and tests (Shopware ${{ matrix.shopware }})
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shopware: '6.6'
+            dockware: '6.6.10.0'
+            bundle: 'js css'
+          - shopware: '6.7'
+            dockware: '6.7.2.2'
+            bundle: 'assets .vite'
+    env:
+      DOCKWARE_TAG: ${{ matrix.dockware }}
     steps:
       - uses: actions/checkout@v7
 
@@ -28,9 +48,21 @@ jobs:
       - name: Start Shopware and install the plugin
         run: bin/up.sh
 
-      # PHP-CS-Fixer, PHPStan, ESLint, Stylelint, Administration tests, PHPUnit unit and integration tests.
+      # PHP-CS-Fixer, PHPStan, ESLint (6.6 only), the Administration tests, PHPUnit unit and integration tests.
       - name: Run all checks
         run: bin/qa.sh
+
+      # The plugin ships a prebuilt Administration bundle per Shopware line: webpack output (js, css) for 6.6 and
+      # Vite output (assets, .vite) for 6.7. Rebuilding must not change what is committed.
+      - name: The committed Administration bundle matches the build
+        run: |
+          cd src/Resources/public/administration
+          changed="$(git status --porcelain -- ${{ matrix.bundle }})"
+          if [ -n "$changed" ]; then
+            echo "The committed bundle for Shopware ${{ matrix.shopware }} is out of date. Run bin/up.sh and commit the result:"
+            echo "$changed"
+            exit 1
+          fi
 
       - name: Shopware logs
         if: failure()

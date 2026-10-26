@@ -94,9 +94,7 @@ Shopware.Component.register('complianty-connector-page', {
                 return null;
             }
 
-            const locale = Shopware.State.get('session').currentLocale || undefined;
-
-            return new Date(value).toLocaleString(locale);
+            return this.formatDate(value);
         },
     },
 
@@ -116,7 +114,8 @@ Shopware.Component.register('complianty-connector-page', {
 
     methods: {
         formatDate(value) {
-            const locale = Shopware.State.get('session').currentLocale || undefined;
+            // vue-i18n knows the Administration language on every Shopware line. The session store of 6.6 is gone in 6.7.
+            const locale = this.$i18n?.locale || undefined;
 
             return new Date(value).toLocaleString(locale);
         },

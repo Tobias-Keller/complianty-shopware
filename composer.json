@@ -24,7 +24,7 @@
         "source": "https://github.com/Tobias-Keller/complianty-shopware"
     },
     "require": {
-        "shopware/core": "~6.6.0",
+        "shopware/core": "~6.6.0 || ~6.7.0",
         "php": ">=8.2"
     },
     "autoload": {

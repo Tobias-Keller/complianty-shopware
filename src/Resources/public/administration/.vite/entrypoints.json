@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/compliantyconnector/administration/",
+  "entryPoints": {
+    "complianty-connector": {
+      "css": [
+        "/bundles/compliantyconnector/administration/assets/complianty-connector-DJhFOg3o.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/compliantyconnector/administration/assets/complianty-connector-BMfZIdLb.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}
